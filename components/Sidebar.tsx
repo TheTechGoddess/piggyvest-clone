@@ -42,13 +42,13 @@ export default function Sidebar() {
         {menuItems.map((item) => (
           <Link key={item.title} href={item.href}>
             <div
-              className={`flex items-center space-x-5 ${
-                isLinkActive(item.href) ? "ml-4" : ""
+              className={`flex items-center space-x-5 transition-all duration-500 ${
+                isLinkActive(item.href) ? "ml-4 " : "ml-0"
               }`}
             >
               <Image src={item.icon} alt={item.title} width={28} height={28} />
               <p
-                className={`static ${
+                className={` ${
                   isLinkActive(item.href)
                     ? "text-primary bg-white py-1 pl-5 pr-10 rounded-t-lg rounded-r-lg"
                     : ""
