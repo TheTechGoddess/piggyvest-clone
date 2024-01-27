@@ -30,7 +30,7 @@ export default function Sidebar() {
   const isLinkActive = (currentPath: string) => pathname === currentPath;
 
   return (
-    <main className="w-[265px] bg-primary fixed h-screen py-8 px-4 text-white">
+    <main className="w-[265px] bg-primary fixed h-screen py-8 px-6 text-white">
       {/* Logo and hamburger menu */}
       <div className="flex items-center space-x-5">
         <Image src={hamburger} alt="menu" width={28} height={28} />
@@ -38,12 +38,12 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation links */}
-      <div className="flex flex-col space-y-8 mt-12">
+      <div className="flex flex-col space-y-10 mt-12">
         {menuItems.map((item) => (
           <Link key={item.title} href={item.href}>
             <div
-              className={`flex items-center space-x-5 transition-all duration-500 ${
-                isLinkActive(item.href) ? "ml-4 " : "ml-0"
+              className={`flex items-center space-x-5 font-semibold transition-all duration-500 ${
+                isLinkActive(item.href) ? "ml-2 " : "ml-0"
               }`}
             >
               <Image src={item.icon} alt={item.title} width={28} height={28} />
