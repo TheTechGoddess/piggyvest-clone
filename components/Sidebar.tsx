@@ -32,11 +32,11 @@ export default function Sidebar() {
     <main className="w-[240px] border-r fixed h-[calc(100vh-70px)] py-8 text-black">
       {/* Navigation links */}
       <div className="flex flex-col space-y-3">
-        {menuItems.map((item) => (
+        {menuItems.map((item, index) => (
           <Link key={item.title} href={item.href}>
             <div
               className={`flex items-center text-sm space-x-4 font-semibold transition-all duration-500 px-5 py-2 ${
-                isLinkActive(item.href) ? "bg-[#F5F5F5] " : ""
+                isLinkActive(item.href) ? "bg-[#F5F5F5]" : ""
               }`}
             >
               {/* <Image src={item.icon} alt={item.title} width={28} height={28} /> */}
@@ -50,6 +50,7 @@ export default function Sidebar() {
                 {item.title}
               </p>
             </div>
+            {isLinkActive(item.href) && <hr className="mt-2" />}
           </Link>
         ))}
       </div>

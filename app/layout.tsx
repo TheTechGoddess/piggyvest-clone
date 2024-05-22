@@ -23,7 +23,7 @@ export default function RootLayout({
           <div className="flex w-full">
             <div className="mt-[70px]">
               <Sidebar />
-              <div className="ml-[265px] w-full">{children}</div>
+              <div className="ml-[265px] w-full z-30">{children}</div>
             </div>
           </div>
         </div>
