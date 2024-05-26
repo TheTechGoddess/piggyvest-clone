@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
-import "./globals.css";
+import "./globals.css"; // Ensure this file contains the base/global styles
+import "./layout.css"; // Import the new CSS file for layout styles
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
+
 const inter = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,10 +22,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <div>
           <Header />
-          <div className="flex w-full">
-            <div className="mt-[70px]">
+          <div className="layout-container">
+            <div className="sidebar-container">
               <Sidebar />
-              <div className="ml-[265px] w-full z-30">{children}</div>
+              <div className="main-content">{children}</div>
             </div>
           </div>
         </div>

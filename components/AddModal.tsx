@@ -8,13 +8,46 @@ import { CgNotes } from "react-icons/cg";
 interface AddModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSave: (newContact: MenuItem) => void;
 }
 
-const AddModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
-  // Function to handle form submission
+const getRandomColor = () => {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
+
+const AddModal: React.FC<AddModalProps> = ({ isOpen, onClose, onSave }) => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    company: "",
+    jobTitle: "",
+    email: "",
+    phone: "",
+    notes: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
   const handleSubmit = () => {
-    // Implement form submission logic here
-    onClose(); // Close the modal after submission
+    const newContact: MenuItem = {
+      img: formData.firstName.charAt(0).toUpperCase(),
+      name: `${formData.firstName} ${formData.lastName}`,
+      email: formData.email,
+      number: formData.phone,
+      work: formData.jobTitle,
+      starred: false,
+      color: getRandomColor(),
+    };
+    onSave(newContact);
+    onClose();
   };
 
   return (
@@ -27,7 +60,7 @@ const AddModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
         <h2 className="text-xl font-semibold p-5 bg-[#F7F7F7] text-[#202020]">
           Create Contact
         </h2>
-        <div className="px-6  flex flex-col space-y-3 py-3">
+        <div className="px-6 flex flex-col space-y-3 py-3">
           <div className="flex justify-between items-center">
             <div className="w-[10%] flex justify-center">
               <div
@@ -37,19 +70,24 @@ const AddModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
                 <FaPlus />
               </div>
             </div>
-
             <div className="w-[40%]">
               <input
                 type="text"
+                name="firstName"
                 placeholder="First name"
-                className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
+                value={formData.firstName}
+                onChange={handleChange}
+                className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
               />
             </div>
             <div className="w-[40%]">
               <input
                 type="text"
+                name="lastName"
                 placeholder="Last name"
-                className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
+                value={formData.lastName}
+                onChange={handleChange}
+                className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
               />
             </div>
           </div>
@@ -60,15 +98,21 @@ const AddModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
             <div className="w-[40%]">
               <input
                 type="text"
+                name="company"
                 placeholder="Company"
-                className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
+                value={formData.company}
+                onChange={handleChange}
+                className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
               />
             </div>
             <div className="w-[40%]">
               <input
                 type="text"
+                name="jobTitle"
                 placeholder="Job Title"
-                className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
+                value={formData.jobTitle}
+                onChange={handleChange}
+                className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
               />
             </div>
           </div>
@@ -76,12 +120,14 @@ const AddModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
             <div className="w-[10%] flex justify-center">
               <IoMdMail className="text-[#929292] text-lg" />
             </div>
-
             <div className="w-[85%]">
               <input
                 type="text"
+                name="email"
                 placeholder="Email"
-                className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
+                value={formData.email}
+                onChange={handleChange}
+                className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
               />
             </div>
           </div>
@@ -89,12 +135,14 @@ const AddModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
             <div className="w-[10%] flex justify-center">
               <FaPhoneAlt className="text-[#929292] text-lg" />
             </div>
-
             <div className="w-[85%]">
               <input
                 type="text"
+                name="phone"
                 placeholder="Phone"
-                className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
+                value={formData.phone}
+                onChange={handleChange}
+                className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
               />
             </div>
           </div>
@@ -102,22 +150,24 @@ const AddModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
             <div className="w-[10%] flex justify-center">
               <CgNotes className="text-[#929292] text-lg" />
             </div>
-
             <div className="w-[85%]">
               <input
                 type="text"
+                name="notes"
                 placeholder="Notes"
-                className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
+                value={formData.notes}
+                onChange={handleChange}
+                className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#BFBFBF] placeholder:font-semibold text-[#202020] font-semibold"
               />
             </div>
           </div>
           <div className="flex justify-end self-end space-x-8">
-            <button onClick={onClose} className=" text-[#4527A0] font-semibold">
+            <button onClick={onClose} className="text-[#4527A0] font-semibold">
               Cancel
             </button>
             <button
               onClick={handleSubmit}
-              className=" text-[#4527A0] font-semibold"
+              className="text-[#4527A0] font-semibold"
             >
               Save
             </button>

@@ -1,8 +1,6 @@
-import { useState } from "react";
-import { FaEdit, FaStar, FaPlus } from "react-icons/fa";
+import { useState, useEffect } from "react";
 import { BsBuildingsFill } from "react-icons/bs";
 import { IoMdMail } from "react-icons/io";
-import { MenuItem } from "../app/page/types";
 import { FaPhoneAlt } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 
@@ -10,15 +8,47 @@ interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
   item: MenuItem | null;
+  onSave: (updatedItem: MenuItem) => void;
 }
 
-const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, item }) => {
-  const [editedItem, setEditedItem] = useState<MenuItem | null>(null);
+const EditModal: React.FC<EditModalProps> = ({
+  isOpen,
+  onClose,
+  item,
+  onSave,
+}) => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [work, setWork] = useState("");
+  const [email, setEmail] = useState("");
+  const [number, setNumber] = useState("");
+  const [notes, setNotes] = useState("");
 
-  // Function to handle form submission
+  useEffect(() => {
+    if (item) {
+      const nameParts = item.name.split(" ");
+      setFirstName(nameParts[0] || "");
+      setLastName(nameParts.slice(1).join(" ") || "");
+      setWork(item.work);
+      setEmail(item.email);
+      setNumber(item.number);
+      setNotes(item.notes);
+    }
+  }, [item]);
+
   const handleSubmit = () => {
-    // Implement form submission logic here
-    onClose(); // Close the modal after submission
+    if (item) {
+      const updatedItem = {
+        ...item,
+        name: `${firstName} ${lastName}`,
+        work,
+        email,
+        number,
+        notes,
+      };
+      onSave(updatedItem);
+      onClose();
+    }
   };
 
   return (
@@ -31,7 +61,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, item }) => {
         <h2 className="text-xl font-semibold p-5 bg-[#F7F7F7] text-[#202020]">
           Edit Contact
         </h2>
-        <div className="px-6  flex flex-col space-y-3 py-3">
+        <div className="px-6 flex flex-col space-y-3 py-3">
           {item && (
             <>
               <div className="flex justify-between items-start">
@@ -46,20 +76,22 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, item }) => {
 
                 <div className="w-[40%]">
                   <p className="text-xs font-medium text-gray-400">
-                    First name
+                    First Name
                   </p>
                   <input
                     type="text"
-                    placeholder={item.name.split(" ")[0]}
-                    className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#202020] placeholder:font-semibold text-[#202020] font-semibold"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm text-[#202020] font-semibold"
                   />
                 </div>
                 <div className="w-[40%]">
                   <p className="text-xs font-medium text-gray-400">Last Name</p>
                   <input
                     type="text"
-                    placeholder={item.name.split(" ").slice(1).join(" ")}
-                    className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#202020] placeholder:font-semibold text-[#202020] font-semibold"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm text-[#202020] font-semibold"
                   />
                 </div>
               </div>
@@ -70,15 +102,17 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, item }) => {
                 <div className="w-[40%]">
                   <input
                     type="text"
-                    placeholder="Fluid angle"
-                    className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#202020] placeholder:font-semibold text-[#202020] font-semibold"
+                    value={work}
+                    onChange={(e) => setWork(e.target.value)}
+                    className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm text-[#202020] font-semibold"
                   />
                 </div>
                 <div className="w-[40%]">
                   <input
                     type="text"
-                    placeholder="Technical (Lead Africa)"
-                    className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#202020] placeholder:font-semibold text-[#202020] font-semibold"
+                    name="jobTitle"
+                    placeholder="Job Title"
+                    className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm text-[#202020] font-semibold"
                   />
                 </div>
               </div>
@@ -86,19 +120,20 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, item }) => {
                 <div className="w-[10%] flex justify-center">
                   <IoMdMail className="text-[#929292] text-lg" />
                 </div>
-
                 <div className="w-[40%]">
                   <input
                     type="text"
-                    placeholder={item.email}
-                    className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#202020] placeholder:font-semibold text-[#202020] font-semibold"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm text-[#202020] font-semibold"
                   />
                 </div>
                 <div className="w-[40%]">
                   <input
                     type="text"
+                    name="label"
                     placeholder="Label"
-                    className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#202020] placeholder:font-semibold text-[#202020] font-semibold"
+                    className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm text-[#202020] font-semibold"
                   />
                 </div>
               </div>
@@ -106,19 +141,20 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, item }) => {
                 <div className="w-[10%] flex justify-center">
                   <FaPhoneAlt className="text-[#929292] text-lg" />
                 </div>
-
                 <div className="w-[40%]">
                   <input
                     type="text"
-                    placeholder={item.number}
-                    className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#202020] placeholder:font-semibold text-[#202020] font-semibold"
+                    value={number}
+                    onChange={(e) => setNumber(e.target.value)}
+                    className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm text-[#202020] font-semibold"
                   />
                 </div>
                 <div className="w-[40%]">
                   <input
                     type="text"
+                    name="phoneType"
                     placeholder="Mobile"
-                    className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#202020] placeholder:font-semibold text-[#202020] font-semibold"
+                    className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm text-[#202020] font-semibold"
                   />
                 </div>
               </div>
@@ -126,24 +162,25 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, item }) => {
                 <div className="w-[10%] flex justify-center">
                   <CgNotes className="text-[#929292] text-lg" />
                 </div>
-
                 <div className="w-[85%]">
                   <input
                     type="text"
-                    className="border-b-2 border-[#E5E5E5] focus:none p-1 w-full bg-greybg outline-none text-sm placeholder:text-[#202020] placeholder:font-semibold text-[#202020] font-semibold"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="border-b-2 border-[#E5E5E5] p-1 w-full bg-greybg outline-none text-sm text-[#202020] font-semibold"
                   />
                 </div>
               </div>
               <div className="flex justify-end self-end space-x-8">
                 <button
                   onClick={onClose}
-                  className=" text-[#4527A0] font-semibold"
+                  className="text-[#4527A0] font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSubmit}
-                  className=" text-[#4527A0] font-semibold"
+                  className="text-[#4527A0] font-semibold"
                 >
                   Save
                 </button>

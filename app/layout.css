@@ -1,0 +1,14 @@
+.layout-container {
+  display: flex;
+  width: 100%;
+}
+
+.sidebar-container {
+  margin-top: 70px;
+}
+
+.main-content {
+  margin-left: 265px;
+  width: 100%;
+  z-index: 30;
+}

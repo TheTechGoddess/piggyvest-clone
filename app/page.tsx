@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { FaEdit, FaStar, FaPlus } from "react-icons/fa";
 import { BiDotsVerticalRounded } from "react-icons/bi";
+import { MdEdit } from "react-icons/md";
 import EditModal from "@/components/EditModal";
 import ViewModal from "@/components/ViewModal";
 import AddModal from "@/components/AddModal";
@@ -11,8 +12,9 @@ interface MenuItem {
   name: string;
   email: string;
   number: string;
+  work: string;
   starred: boolean;
-  color: string; // Add a color property to MenuItem
+  color: string;
 }
 
 const getRandomColor = () => {
@@ -24,12 +26,13 @@ const getRandomColor = () => {
   return color;
 };
 
-const menuItems: MenuItem[] = [
+const initialMenuItems: MenuItem[] = [
   {
     img: "A",
     name: "Abdulazeez Shittu",
     email: "abdul1@gmail.com",
     number: "+1234567889",
+    work: "CEO",
     starred: true,
     color: getRandomColor(),
   },
@@ -38,6 +41,7 @@ const menuItems: MenuItem[] = [
     name: "Another Name",
     email: "another@gmail.com",
     number: "+1234567890",
+    work: "backend developer",
     starred: true,
     color: getRandomColor(),
   },
@@ -46,6 +50,7 @@ const menuItems: MenuItem[] = [
     name: "Someone Else",
     email: "someone@gmail.com",
     number: "+1234567891",
+    work: "frontend developer",
     starred: false,
     color: getRandomColor(),
   },
@@ -54,6 +59,7 @@ const menuItems: MenuItem[] = [
     name: "Different Person",
     email: "different@gmail.com",
     number: "+1234567892",
+    work: "CTO",
     starred: false,
     color: getRandomColor(),
   },
@@ -62,6 +68,7 @@ const menuItems: MenuItem[] = [
     name: "New Person",
     email: "new@gmail.com",
     number: "+1234567893",
+    work: "technitian",
     starred: true,
     color: getRandomColor(),
   },
@@ -70,12 +77,14 @@ const menuItems: MenuItem[] = [
     name: "500 lv",
     email: "lv@gmail.com",
     number: "+1234567893",
+    work: "Lead Engineer",
     starred: false,
     color: getRandomColor(),
   },
 ];
 
 export default function Home() {
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(initialMenuItems);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -92,8 +101,20 @@ export default function Home() {
     setShowViewModal(true);
   };
 
-  const handleClick = () => {
+  const handleAddClick = () => {
     setShowAddModal(true);
+  };
+
+  const handleAddSave = (newContact: MenuItem) => {
+    setMenuItems((prevItems) => [...prevItems, newContact]);
+  };
+
+  const handleEditSave = (updatedContact: MenuItem) => {
+    setMenuItems((prevItems) =>
+      prevItems.map((item) =>
+        item.email === updatedContact.email ? updatedContact : item
+      )
+    );
   };
 
   useEffect(() => {
@@ -136,8 +157,8 @@ export default function Home() {
       <p className="text-[#212121] font-medium w-[30%]">{item.number}</p>
       {!isStarredSection && highlightedIndex === index && (
         <div className="flex space-x-4">
-          <FaStar className="text-yellow-500" />
-          <FaEdit
+          <FaStar className="text-gray-600" />
+          <MdEdit
             className="text-gray-600"
             onClick={() => handleEditClick(item)}
           />
@@ -167,7 +188,9 @@ export default function Home() {
         </p>
         <div className="my-4 flex flex-col space-y-4 w-full items-start">
           <div className="w-full flex items-start">
-            <div className="w-[10%]">⭐</div>
+            <div className="w-[10%]">
+              <FaStar className="text-[#F80054] cursor-pointer" />
+            </div>
             <div className="w-[90%] -mt-2">
               {menuItems
                 .filter((item) => item.starred)
@@ -227,7 +250,7 @@ export default function Home() {
         </div>
       </div>
       <div
-        onClick={() => handleClick()}
+        onClick={handleAddClick}
         className="fixed bottom-10 right-10 cursor-pointer h-10 w-10 bg-[#CC1A58] rounded-full flex justify-center items-center content-center"
       >
         <FaPlus />
@@ -236,13 +259,18 @@ export default function Home() {
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         item={selectedItem}
+        onSave={handleEditSave}
       />
-        <ViewModal
+      <ViewModal
         isOpen={showViewModal}
         onClose={() => setShowViewModal(false)}
         item={selectedItem}
       />
-      <AddModal isOpen={showAddModal} onClose={() => setShowAddModal(false)} />
+      <AddModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSave={handleAddSave}
+      />
     </main>
   );
 }
