@@ -4,6 +4,16 @@ import { IoMdMail } from "react-icons/io";
 import { FaPhoneAlt } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 
+interface MenuItem {
+  img: string;
+  name: string;
+  email: string;
+  number: string;
+  work: string;
+  starred: boolean;
+  color: string;
+}
+
 interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -32,7 +42,7 @@ const EditModal: React.FC<EditModalProps> = ({
       setWork(item.work);
       setEmail(item.email);
       setNumber(item.number);
-      setNotes(item.notes);
+      // setNotes(item.notes);
     }
   }, [item]);
 
