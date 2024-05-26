@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { FaEdit, FaStar, FaPlus } from "react-icons/fa";
+import { FaEdit, FaStar, FaPlus, FaStarHalfAlt } from "react-icons/fa";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { MdEdit } from "react-icons/md";
 import EditModal from "@/components/EditModal";
@@ -117,6 +117,16 @@ export default function Home() {
     );
   };
 
+  const handleStarClick = (item: MenuItem) => {
+    setMenuItems((prevItems) =>
+      prevItems.map((menuItem) =>
+        menuItem.email === item.email
+          ? { ...menuItem, starred: !menuItem.starred }
+          : menuItem
+      )
+    );
+  };
+
   useEffect(() => {
     setHighlightedIndex(0);
   }, []);
@@ -157,7 +167,12 @@ export default function Home() {
       <p className="text-[#212121] font-medium w-[30%]">{item.number}</p>
       {!isStarredSection && highlightedIndex === index && (
         <div className="flex space-x-4">
-          <FaStar className="text-gray-600" />
+          <FaStar
+            className={`cursor-pointer ${
+              item.starred ? "text-yellow-500" : "text-gray-600"
+            }`}
+            onClick={() => handleStarClick(item)}
+          />
           <MdEdit
             className="text-gray-600"
             onClick={() => handleEditClick(item)}
