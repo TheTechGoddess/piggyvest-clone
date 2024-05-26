@@ -29,13 +29,13 @@ export default function Sidebar() {
   const isLinkActive = (currentPath: string) => pathname === currentPath;
 
   return (
-    <main className="w-[240px] border-r fixed h-[calc(100vh-70px)] py-8 text-black">
+    <main className="w-[150px] md:w-[240px] border-r fixed h-[calc(100vh-70px)] py-8 text-black z-40 bg-white">
       {/* Navigation links */}
       <div className="flex flex-col space-y-3">
         {menuItems.map((item, index) => (
           <Link key={item.title} href={item.href}>
             <div
-              className={`flex items-center text-sm space-x-4 font-semibold transition-all duration-500 px-5 py-2 ${
+              className={`flex items-center text-sm space-x-4 font-semibold transition-all duration-500 px-3 md:px-5 py-2  ${
                 isLinkActive(item.href) ? "bg-[#F5F5F5]" : ""
               }`}
             >

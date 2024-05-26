@@ -25,7 +25,9 @@ export default function RootLayout({
           <div className="layout-container">
             <div className="sidebar-container">
               <Sidebar />
-              <div className="main-content">{children}</div>
+              <div className="main-content ml-[175px] md:ml-[265px]">
+                {children}
+              </div>
             </div>
           </div>
         </div>
