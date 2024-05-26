@@ -9,6 +9,16 @@ import { CgNotes } from "react-icons/cg";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { MdClose } from "react-icons/md";
 
+interface MenuItem {
+  img: string;
+  name: string;
+  email: string;
+  number: string;
+  work: string;
+  starred: boolean;
+  color: string;
+}
+
 interface ViewModalProps {
   isOpen: boolean;
   onClose: () => void;

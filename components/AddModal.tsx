@@ -5,6 +5,16 @@ import { IoMdMail } from "react-icons/io";
 import { FaPhoneAlt } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 
+interface MenuItem {
+  img: string;
+  name: string;
+  email: string;
+  number: string;
+  work: string;
+  starred: boolean;
+  color: string;
+}
+
 interface AddModalProps {
   isOpen: boolean;
   onClose: () => void;
