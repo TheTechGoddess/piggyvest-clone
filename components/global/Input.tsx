@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
+import email from "@/assets/images/email.svg";
 import eyeIcon from "@/assets/images/eye.svg";
 import closedEyeIcon from "@/assets/images/closedeye.svg";
 
@@ -37,15 +38,12 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <div className="input-wrapper">
-      <label
-        className="text-header font-semibold uppercase text-sm"
-        htmlFor={name}
-      >
+      <label className="text-header font-semibold text-sm" htmlFor={name}>
         {label}
       </label>
       <div className="relative">
         <input
-          className={`border rounded-lg py-3.5 px-4 outline-none bg-white text-sm placeholder-bodytext w-full text-bodytext2 focus:border-primary ${
+          className={`border rounded-lg py-3 px-4 outline-none bg-white text-sm placeholder-bodytext w-full text-bodytext2 focus:border-primary ${
             customError ? "border-red-500" : "border-[#D0D5DD]"
           }`}
           type={inputType}
@@ -57,6 +55,20 @@ const Input: React.FC<InputProps> = ({
         {type === "password" && (
           <button
             onClick={togglePasswordVisibility}
+            type="button"
+            className="absolute inset-y-0 right-0 px-3 flex items-center"
+          >
+            <Image
+              src={inputType === "password" ? eyeIcon : closedEyeIcon}
+              alt={inputType === "password" ? "Show password" : "Hide password"}
+              width={24}
+              height={24}
+              className="w-6 mt-1"
+            />
+          </button>
+        )}
+        {type === "email" && (
+          <button
             type="button"
             className="absolute inset-y-0 right-0 px-3 flex items-center"
           >

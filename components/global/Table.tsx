@@ -1,4 +1,6 @@
 import React, { useState, useMemo } from "react";
+import Image from "next/image";
+import link from "@/assets/images/link.svg";
 
 interface TableComponentProps {
   data: Array<Array<any>>;
@@ -30,89 +32,53 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   return (
     <div>
-      <div className="overflow-x-auto hide-scrollbar">
+      <div className="overflow-x-auto hide-scrollbar border border-[#EAECF0] rounded-lg">
         <table className="w-full border-collapse">
-          <thead className="text-left bg-[#F2F4F7] text-[#757C86] font-medium text-sm">
-            <tr>
-              <th className="py-4 pl-4 text-left">S/N</th>
+          <thead className="text-left bg-[#F9FAFB] text-[#757C86] font-medium text-sm">
+            <tr className=" cursor-pointer border-b border-[#EAECF0]">
               {headers.map((header, index) => (
                 <th
                   key={index}
-                  className="text-sm text-bodytext2 font-semibold px-3 overflow-hidden whitespace-nowrap"
+                  className={`text-xs text-bodytext py-3 font-medium px-3 overflow-hidden whitespace-nowrap ${
+                    index !== 0 ? "" : " pl-4 "
+                  }`}
                 >
                   {header}
                 </th>
               ))}
               {showDetails && (
-                <th className="text-sm text-bodytext2 pr-4 font-semibold">
-                  Details
-                </th>
+                <th className="text-sm text-bodytext2 pr-4 font-semibold"></th>
               )}
             </tr>
           </thead>
-          <tbody className="text-[#39404F] text-sm bg-white">
+          <tbody className="text-[#39404F] text-sm bg-white ">
             {filteredData.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
-                className="border-b border-[#D2D2D4] cursor-pointer"
+                className={`cursor-pointer ${
+                  rowIndex !== filteredData.length - 1
+                    ? "border-b border-[#EAECF0]"
+                    : ""
+                }`}
                 onClick={() => handleRowClick(row, rowIndex)}
               >
-                <td className="px-4 text-bodytext2 font-medium text-sm overflow-hidden text-left">
-                  {rowIndex + 1}
-                </td>
                 {row.map((item, colIndex) => (
                   <td
                     key={colIndex}
-                    className={`px-3 text-bodytext2 text-sm overflow-hidden text-left ${
+                    className={`px-3 text-bodytext text-sm overflow-hidden text-left py-3 ${
                       colIndex !== 0
-                        ? "py-4"
-                        : "py-4 pl-0 text-header font-medium"
-                    }`}
+                        ? ""
+                        : " pl-4 text-header font-medium shadow-lg"
+                    } ${colIndex !== 2 ? "" : " underline"}`}
                   >
                     <div className="flex py-1 rounded">
-                      <span
-                        className={`${
-                          headers[colIndex] === "Full Name" ||
-                          headers[colIndex] === "Programs"
-                            ? "max-w-[250px] min-w-[100px]"
-                            : ""
-                        }
-                          ${
-                            item === "active" || item === "completed"
-                              ? "py-2 px-3 flex justify-center bg-[#DEFDE5] text-[#009621] rounded-2xl capitalize"
-                              : ""
-                          }
-                          ${
-                            headers[colIndex] === "Total Ans"
-                              ? "py-2 px-3 flex justify-center bg-dark text-white rounded-2xl"
-                              : ""
-                          }
-                          ${
-                            item === "incomplete"
-                              ? "py-2 px-3 flex justify-center bg-[#FFFAEB] text-[#F79009] rounded-2xl capitalize"
-                              : ""
-                          }`}
-                      >
-                        {item}
-                      </span>
-                      {["successful", "pending", "failed"].includes(item) && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          style={{ strokeWidth: 1.5 }}
-                        >
-                          {/* Status icon path */}
-                        </svg>
-                      )}
+                      <span>{item}</span>
                     </div>
                   </td>
                 ))}
                 {showDetails && (
                   <td className="pr-4 relative">
-                    <p className="text-[#4FBFA3]">View</p>
+                    <Image src={link} alt={"link"} width={14} height={14} />
                   </td>
                 )}
               </tr>
