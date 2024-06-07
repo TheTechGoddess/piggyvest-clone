@@ -9,14 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#062863",
-        black: "#000000",
-        blue: "#0D60D8",
-        purple: "#7A15E5",
-        white: "#FFFFFF",
-        bodytext: "#424A57",
-        green: "#11A468",
-        grey: "#C3D8F5",
+        primary: "#3976E8",
+        header: "#101928",
+        bodytext: "#667185",
+        bodytext2: "#98A2B3",
       },
     },
   },
