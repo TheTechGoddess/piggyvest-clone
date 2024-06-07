@@ -13,11 +13,11 @@ interface InputProps {
   placeholder?: string;
   error?: boolean;
   customError?: string;
-  onUpdateModelValue: (value: string | number) => void;
+  onUpdateModelValue: (name: string, value: string | number) => void;
 }
 
 const Input: React.FC<InputProps> = ({
-  type = "",
+  type = "text",
   name,
   modelValue = "",
   label,
@@ -33,7 +33,7 @@ const Input: React.FC<InputProps> = ({
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    onUpdateModelValue(e.target.value);
+    onUpdateModelValue(name, e.target.value);
   };
 
   return (
@@ -73,8 +73,8 @@ const Input: React.FC<InputProps> = ({
             className="absolute inset-y-0 right-0 px-3 flex items-center"
           >
             <Image
-              src={inputType === "password" ? eyeIcon : closedEyeIcon}
-              alt={inputType === "password" ? "Show password" : "Hide password"}
+              src={email}
+              alt={"email"}
               width={24}
               height={24}
               className="w-6 mt-1"

@@ -1,86 +1,65 @@
-import { useState } from "react";
-import { FaEdit, FaStar, FaPlus } from "react-icons/fa";
-import { MdEdit } from "react-icons/md";
-import { BsBuildingsFill } from "react-icons/bs";
-import { MdDelete } from "react-icons/md";
-import { IoMdMail } from "react-icons/io";
-import { FaPhoneAlt } from "react-icons/fa";
-import { CgNotes } from "react-icons/cg";
-import { BiDotsVerticalRounded } from "react-icons/bi";
-import { MdClose } from "react-icons/md";
-
-interface MenuItem {
-  img: string;
-  name: string;
-  email: string;
-  number: string;
-  work: string;
-  starred: boolean;
-  color: string;
-}
+import React, { useState } from "react";
+import Image from "next/image";
+import link from "@/assets/images/link2.svg";
+import copy from "@/assets/images/copy.svg";
 
 interface ViewModalProps {
-  isOpen: boolean;
+  data: {
+    name: string;
+    description: string;
+    url: string;
+  };
   onClose: () => void;
-  item: MenuItem | null;
 }
 
-const ViewModal: React.FC<ViewModalProps> = ({ isOpen, onClose, item }) => {
-  const [editedItem, setEditedItem] = useState<MenuItem | null>(null);
+const ViewModal: React.FC<ViewModalProps> = ({ data, onClose }) => {
+  const [copied, setCopied] = useState(false);
 
-  // Function to handle form submission
-  const handleSubmit = () => {
-    // Implement form submission logic here
-    onClose(); // Close the modal after submission
+  const handleCopyClick = () => {
+    navigator.clipboard
+      .writeText(data.url)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => {
+          setCopied(false);
+        }, 5000);
+      })
+      .catch((err) => {
+        console.error("Failed to copy URL: ", err);
+      });
   };
 
   return (
-    <div
-      className={`fixed inset-0 flex items-center justify-center bg-gray-500 w-full bg-opacity-75 z-50 ${
-        isOpen ? "" : "hidden"
-      }`}
-    >
-      {item && (
-        <>
-          <div className="bg-white w-[50%]">
-            <div className="p-5 bg-[#F7F7F7] flex justify-between items-center">
-              <div className="text-xl font-semibold   text-[#202020] flex space-x-5 items-center">
-                <div
-                  className="w-14 h-14 rounded-full flex justify-center text-white items-center text-sm"
-                  style={{ backgroundColor: item.color }}
-                >
-                  {item.img}
-                </div>
-                <h2 className="">{item.name}</h2>
-              </div>
-              <div className="flex space-x-3">
-                <FaStar className="text-[#F80054] cursor-pointer" />
-                <MdEdit className="text-gray-600 cursor-pointer" />
-                <MdDelete className="text-gray-500 cursor-pointer" />
-                <MdClose onClick={onClose} className="cursor-pointer" />
-              </div>
-            </div>
-
-            <div className="px-6  flex flex-col space-y-3 py-5">
-              <p className="font-semibold mb-6">Contact Details</p>
-              <div className=" flex flex-col space-y-3">
-                <div className="flex space-x-5 items-center">
-                  <BsBuildingsFill className="text-[#929292] text-lg" />
-                  <p className="font-semibold">{item.work}</p>
-                </div>
-                <div className="flex space-x-5 items-center">
-                  <IoMdMail className="text-[#929292] text-lg" />
-                  <p className="font-semibold text-[#4527A0]">{item.email}</p>
-                </div>
-                <div className="flex space-x-5 items-center">
-                  <FaPhoneAlt className="text-[#929292] text-lg" />
-                  <p className="font-semibold text-[#4527A0]">{item.number}</p>
-                </div>
-              </div>
-            </div>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-1/2 lg:w-1/3 flex flex-col space-y-5">
+        <Image src={link} alt={"link"} width={40} height={40} />
+        <h2 className="font-semibold text-header text-lg">View full URL</h2>
+        <div>
+          <p className="text-bodytext font-medium text-sm">share link</p>
+          <div className="flex space-x-3 items-center">
+            <input
+              type="text"
+              value={data.url}
+              className="border rounded-lg p-3 mt-2 outline-none bg-white text-sm placeholder-bodytext w-full text-header focus:border-primary"
+            />
+            <Image
+              src={copy}
+              alt={"copy"}
+              width={20}
+              height={20}
+              className="cursor-pointer"
+              onClick={handleCopyClick}
+            />
+            {copied && <span className="text-sm text-primary">Copied!</span>}
           </div>
-        </>
-      )}
+        </div>
+        <button
+          onClick={onClose}
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Done
+        </button>
+      </div>
     </div>
   );
 };

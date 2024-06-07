@@ -3,10 +3,10 @@ import Image from "next/image";
 import link from "@/assets/images/link.svg";
 
 interface TableComponentProps {
-  data: Array<Array<any>>;
+  data: Array<{ [key: string]: any }>;
   headers: Array<string>;
   showDetails: boolean;
-  onRowClick: (row: Array<any>, index: number) => void;
+  onRowClick: (row: { [key: string]: any }, index: number) => void;
 }
 
 const TableComponent: React.FC<TableComponentProps> = ({
@@ -20,19 +20,19 @@ const TableComponent: React.FC<TableComponentProps> = ({
   const filteredData = useMemo(() => {
     if (!data) return [];
     return data.filter((row) =>
-      row.some((val) =>
+      Object.values(row).some((val) =>
         val.toString().toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
   }, [data, searchQuery]);
 
-  const handleRowClick = (row: Array<any>, index: number) => {
+  const handleRowClick = (row: { [key: string]: any }, index: number) => {
     onRowClick(row, index);
   };
 
   return (
     <div>
-      <div className="overflow-x-auto hide-scrollbar border border-[#EAECF0] rounded-lg">
+      <div className="overflow-x-auto hide-scrollbar border border-[#EAECF0] rounded-t-lg">
         <table className="w-full border-collapse">
           <thead className="text-left bg-[#F9FAFB] text-[#757C86] font-medium text-sm">
             <tr className=" cursor-pointer border-b border-[#EAECF0]">
@@ -62,7 +62,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 }`}
                 onClick={() => handleRowClick(row, rowIndex)}
               >
-                {row.map((item, colIndex) => (
+                {Object.values(row).map((item, colIndex) => (
                   <td
                     key={colIndex}
                     className={`px-3 text-bodytext text-sm overflow-hidden text-left py-3 ${
