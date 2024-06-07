@@ -90,7 +90,7 @@ const Home: React.FC = () => {
       const formattedData = response.data.data.map((item: any) => ({
         name: item.name,
         description: item.description,
-        url: item.generatedUrl,
+        generatedUrl: item.generatedUrl,
       }));
       setData(formattedData);
       const meta = response.data.meta;

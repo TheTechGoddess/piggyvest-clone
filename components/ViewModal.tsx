@@ -7,7 +7,7 @@ interface ViewModalProps {
   data: {
     name: string;
     description: string;
-    url: string;
+    generatedUrl: string;
   };
   onClose: () => void;
 }
@@ -39,7 +39,7 @@ const ViewModal: React.FC<ViewModalProps> = ({ data, onClose }) => {
           <div className="flex space-x-3 items-center">
             <input
               type="text"
-              value={data.url}
+              value={data.generatedUrl}
               className="border rounded-lg p-3 mt-2 outline-none bg-white text-sm placeholder-bodytext w-full text-header focus:border-primary"
             />
             <Image
