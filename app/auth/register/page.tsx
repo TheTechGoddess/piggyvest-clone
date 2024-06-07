@@ -1,17 +1,20 @@
 "use client";
 import axiosInstance from "@/utils/axiosInstance";
 import { useState, FormEvent } from "react";
-import { useRouter } from "next/router";
 import Input from "@/components/global/Input";
 import Button from "@/components/global/Button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  // const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+
+  const router = useRouter();
 
   const handleInputChange = (name: string, value: string | number) => {
     if (name === "email") setEmail(value as string);
@@ -39,6 +42,9 @@ export default function Login() {
 
     if (!validateForm()) return;
 
+    setLoading(true);
+    setApiError(null);
+
     try {
       const response = await axiosInstance.post("/api/user/register", {
         email,
@@ -46,15 +52,16 @@ export default function Login() {
         confirmPassword,
       });
       console.log("Account created successfully:", response.data);
-
-      // Save the token to localStorage
       localStorage.setItem("token", response.data.token.token);
 
-      // Redirect to the home page
-      // router.push("/");
-    } catch (error) {
-      console.error("Error creating account:", error);
-      // Handle error (e.g., display error message to the user)
+      router.push("/");
+    } catch (error: any) {
+      setApiError(
+        error.response?.data?.message || "An error occurred. Please try again."
+      );
+      console.error("Error logging in:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,6 +73,7 @@ export default function Login() {
       <p className="text-center text-bodytext mt-2">
         Enter your credentials to create your account
       </p>
+      {apiError && <p className="text-center text-red-500 mt-2">{apiError}</p>}
       <form onSubmit={handleSubmit} className="flex flex-col space-y-5 mt-6">
         <Input
           type="email"
@@ -97,7 +105,7 @@ export default function Login() {
           customError={errors.confirm_password}
           onUpdateModelValue={handleInputChange}
         />
-        <Button>Create Account</Button>
+        <Button>{loading ? "Creating Account..." : "Create Account"}</Button>
       </form>
       <p className="text-bodytext2 text-center mt-5 text-xs font-medium">
         Already have an account?

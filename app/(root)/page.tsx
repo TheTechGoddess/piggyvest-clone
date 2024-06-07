@@ -1,11 +1,12 @@
 "use client";
-import React, { useState, FormEvent, useEffect } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import Table from "@/components/global/Table";
 import Input from "@/components/global/Input";
 import Button from "@/components/global/Button";
 import ViewModal from "@/components/ViewModal";
 import Pagination from "@/components/global/Pagination";
+import { redirect } from "next/navigation";
 
 const headers = ["Name", "Description", "Shortened URL"];
 
@@ -20,6 +21,15 @@ const Home: React.FC = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  // const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      redirect("/auth/login");
+    }
+  });
 
   const handleRowClick = (row: any, index: number) => {
     console.log("Row clicked:", row, index);
@@ -59,11 +69,13 @@ const Home: React.FC = () => {
         website,
         description,
       });
+      console.log("API Response:", response.data);
       console.log("URL shortened successfully:", response.data);
       setName("");
       setWebsite("");
       setDescription("");
       getUrls(currentPage);
+      handleRowClick(response.data.data, 0);
     } catch (error) {
       console.error("Error creating URL:", error);
     }
@@ -103,7 +115,7 @@ const Home: React.FC = () => {
   return (
     <div className="">
       <div className="md:w-[50%] lg:w-[35%]">
-        <h1>Shorten URL</h1>
+        <h1 className="text-header font-3xl font-medium">Shorten URL</h1>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-5 mt-6">
           <Input
             type="text"
