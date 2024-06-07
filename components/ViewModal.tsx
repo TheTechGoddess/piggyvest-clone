@@ -17,7 +17,7 @@ const ViewModal: React.FC<ViewModalProps> = ({ data, onClose }) => {
 
   const handleCopyClick = () => {
     navigator.clipboard
-      .writeText(data.url)
+      .writeText(data.generatedUrl)
       .then(() => {
         setCopied(true);
         setTimeout(() => {
